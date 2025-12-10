@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+      <!-- เรียกใช้ไฟล์ CSS -->
+    <link rel="stylesheet" type="text/css" href="movie.css">
+
+    <!-- เรียกใช้ jQuery จาก CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+   
+
+    <script>  
+
+        // เมื่อหน้าเว็บโหลดเสร็จสมบูรณ์
+        $(document).ready(function() 
+        {
+
+            var movie_datas = [
+                {
+                    movieName: "Soul",
+                    poster: "http://localhost/Homework/movie/soul2.jpg",
+                    Description: "“Soul” is a Pixar film about Joe Gardner, a middle-school music teacher who dreams of being a jazz musician. After an accident, his soul goes to The Great Before, where new souls get their personalities. To return to Earth, Joe teams up with 22, a soul who doesn’t want to live. Together, they discover what makes life truly meaningful. The movie premieres on Disney+ on December 25.",
+                    youtubeID: "https://www.youtube.com/embed/4TojlZYqPUo"
+                },
+                {
+                    movieName: "Coco",
+                    poster: "http://localhost/Homework/movie/Coco.jpg",
+                    Description: "This Thanksgiving, experience an all new comedy adventure for the generations. The latest trailer for Disney/Pixar's Coco is here!",
+                    youtubeID: "https://www.youtube.com/embed/xlnPHQ3TLX8"
+                },
+                {
+                    movieName: "Wonder",
+                    poster: "http://localhost/Homework/movie/wonder.jpg",
+                    Description: "A young boy born with a facial deformity is destinied to fit in at a new school, and to make everyone happen to understand he's just another ordinary kid, and that beauty isn't skin deep.",
+                    youtubeID: "https://www.youtube.com/embed/ASAGdtAJPnU"
+                },
+                {
+                    movieName: "Inside Out 2",
+                    poster: "http://localhost/Homework/movie/insideout.jpg",
+                    Description: "Disney and Pixar’s “Inside Out 2” opens in theaters nationwide in just 10 days, inviting moviegoers inside the mind of newly minted teenager Riley just as Headquarters undergoes a sudden demolition to make room for something entirely unexpected: new Emotions. Check out an all-new trailer and feel free to share.",
+                    youtubeID: "https://www.youtube.com/embed/L4DrolmDxmw"
+                },
+                {
+                    movieName: "Flow",
+                    poster: "http://localhost/Homework/movie/flow.jpg",
+                    Description: "The world seems to be coming to an end, teeming with the vestiges of a human presence. Cat is a solitary animal, but as his home is devastated by a great flood, he finds refuge on a boat populated by various species, and will have to team up with them despite their differences. In the lonesome boat sailing through mystical overflowed landscapes, they navigate the challenges and dangers of adapting to this new world.",
+                    youtubeID: "https://www.youtube.com/embed/82WW9dVbglI"
+                }
+            ];
+
+            //วนลูปผ่าน array movie_datas โดยใช้ .forEach() ของ JavaScript
+            movie_datas.forEach(function(movie) 
+            {
+                var movieHtml = `
+                    <a href="#" class="movie movie-link" data-trailer-url="${movie.youtubeID}">
+                        <img src="${movie.poster}" alt="${movie.movieName} Movie">
+                        <p class="description">
+                            <strong>${movie.movieName}</strong><br>
+                            ${movie.Description}
+                        </p>
+                    </a>
+                `;
+                $(".content").append(movieHtml);
+            });
+        
+        
+        
+            
+            // เมื่อเมาส์วางบนรูป ให้เปลี่ยนพื้นหลัง
+            $(".movie").mouseover(function() {
+                $(this).css("background-color", "#aaa");
+            });
+            
+            // เมื่อเอาเมาส์ออก ให้กลับเป็นสีเดิม
+            $(".movie").mouseout(function() {
+                $(this).css("background-color", "#F8C8DC");
+            });
+
+            var delay = 0; // เริ่มต้นด้วย delay 0
+            $(".movie").each(function(index) {
+            var $movie = $(this);
+            setTimeout(function() {
+            $movie.addClass("show"); // เพิ่มคลาส "show" เพื่อให้ opacity เป็น 1
+            }, delay);
+            delay += 200; // เพิ่ม delay ทีละ 200 มิลลิวินาที (0.2 วินาที)
+            });
+
+          //  ฟังก์ชัน jQuery สำหรับ “เปิดวิดีโอใน Modal Popup” (เช่น ดูตัวอย่างหนังในกล่องลอยกลางจอ โดยไม่ต้องเปลี่ยนหน้าเว็บ)
+
+            $(".movie-link").on("click", function(e) 
+            {
+                e.preventDefault(); // ป้องกันการเปลี่ยนหน้า
+
+                var trailerUrl = $(this).data("trailer-url");
+                var iframe = '<iframe width="800" height="450" src="' + trailerUrl + '?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+
+                // เพิ่ม iframe และปุ่มปิดเข้าไปใน modal
+                $("#videoModalContent").html(iframe);
+                $("#videoModal").fadeIn();
+            });
+
+            // ปิด modal เมื่อคลิกที่ปุ่มปิดหรือที่พื้นหลัง
+            $("#closeModal, #videoModal").on("click", function(e) 
+            {
+                if (e.target.id === "videoModal" || e.target.id === "closeModal") 
+                {
+                    $("#videoModal").fadeOut();
+                    $("#videoModalContent").html(''); // ล้าง iframe เพื่อหยุดวิดีโอ
+                }
+            });
+            
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="menu">
+        <a href="#">Let's go to the movies.</a>
+    </div>
+
+    <div class="content">
+        
+    </div>
+
+    <div id="videoModal">
+        <div id="videoModalContent">
+            </div>
+        <span id="closeModal">&times;</span>
+    </div>
+    
+</body>
+</html>
